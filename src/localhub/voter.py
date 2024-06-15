@@ -85,23 +85,23 @@ print(M)
         # sess.commit()
         # vs.append(v)
 with SessionLocal() as sess:
-    l = sess.query(User).all()
-    print(l)
+    print(sess.query(User).all())
 
 @app.get("/")
 def read_main():
     with SessionLocal() as sess:
         l = sess.query(User).all()
-    s : list[Voter]= list()
-    for i in l:
-        s.append(
-            Voter(
-                first_name=i.first_name,
-                last_name=i.last_name,
-                local=i.local,
-                id=i.id
-            )
-        )
+
+        s : list[Voter]= list()
+        for i in l:
+           s.append(
+               Voter(
+                   first_name=i.first_name,
+                   last_name=i.last_name,
+                   local=i.local,
+                   id=i.id
+               )
+           )
     return s
 
 @app.post("/{voter_id}/absent")
@@ -119,14 +119,15 @@ def present(voter_id: str):
     with SessionLocal() as sess:
         print(voter_id)
         user = sess.query(User).filter(User.id == voter_id).first()
-        all = sess.query(User).all()
-        for i in all:
-            s = "".join(voter_id.split("-"))
-            if s is voter_id:
-                print(f"Mam cię {i.first_name}, {i.id}")
-            print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
-        print(user)
+        # all = sess.query(User).all()
+        # for i in all:
+            # s = "".join(voter_id.split("-"))
+            # if s is voter_id:
+                # print(f"Mam cię {i.first_name}, {i.id}")
+            # print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
+        # print(user)
         if user:
+            print("Appended")
             user.meetings.append(M)
             return User
         else:
