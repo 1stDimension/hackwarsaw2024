@@ -1,5 +1,12 @@
-import os
+from fastapi import FastAPI
+from .admin import app as admin_mount
 
-dir = list(os.scandir())
+app = FastAPI()
 
-print(dir)
+
+@app.get("/app")
+def read_main():
+    return {"message": "Hello World from main app"}
+
+
+app.mount("/admin", admin_mount)
