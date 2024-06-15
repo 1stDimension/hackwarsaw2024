@@ -32,8 +32,8 @@ class Voter(BaseModel):
 class Voters(BaseModel):
     voters: list[Voter]
   
-class Presnet(BaseSQL):
-    __tablename__ = "presence"
+# class Presnet(BaseSQL):
+    # __tablename__ = "presence"
 
 
 
