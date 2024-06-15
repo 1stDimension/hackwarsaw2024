@@ -12,7 +12,6 @@
   </tr>
   <tr v-for="voter in voters.voters" :key="voter.id">
     <td><input type="checkbox" :value="voter.id" @change="presentChange(voter.id, $event.target.checked)"></td>
-    <!-- <td><input type="checkbox" :value="voter.id" v-model="presentChange" :checked="true"></td> -->
     <td>{{ voter.first_name }}</td>
     <td>{{ voter.last_name }}</td>
     <td>{{ voter.local }}</td>
@@ -60,7 +59,6 @@ export default {
       catch (err) {
         error.value = err.message
       }
-      result = setVoterPresent(voterId, state)
     }
   }
 }
