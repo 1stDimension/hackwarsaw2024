@@ -42,7 +42,7 @@ Repository = "https://github.com/1stDimension/hackwarsaw2024"
 #Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
 [project.scripts]
-lh = "localhub:main"
+lh = "localhub:app"
 
 #[project.gui-scripts]
 #spam-gui = "spam:main_gui"
