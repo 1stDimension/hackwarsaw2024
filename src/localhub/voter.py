@@ -138,7 +138,6 @@ def present(voter_id: str):
                    local=user.local,
                    id=user.id
                )
-           )
             else:
                 raise HTTPException(404)
         except Exception as e:
