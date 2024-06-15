@@ -31,14 +31,14 @@ class Voters(BaseModel):
     voters: list[Voter]
   
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,Table
+from sqlalchemy import  Column, ForeignKey, Integer, String,Table
 from sqlalchemy.orm import relationship, Mapped
 
 association_table = Table(
     "association_table",
     BaseSQL.metadata,
-    Column("voter_id", ForeignKey("users.id")),
-    Column("meeting_id", ForeignKey("transcripts.id")),
+    Column("voter_id", ForeignKey("users.id")), # type: ignore
+    Column("meeting_id", ForeignKey("transcripts.id")), # type: ignore
 )
 
 class Meeting(BaseSQL):
@@ -49,7 +49,7 @@ class Meeting(BaseSQL):
 
 class User(BaseSQL):
     __tablename__ = "users"
-    id = Column(String, primary_key=True, default=uuid4)
+    id = Column(String, primary_key=True, default=lambda : uuid4().hex)
     first_name = Column(String)
     last_name = Column(String)
     local = Column(String)
@@ -82,6 +82,7 @@ with SessionLocal() as sess:
         )
         u = User(first_name=v.first_name,last_name=v.last_name,local=v.local)
         sess.add(u)
+        sess.commit()
         vs.append(v)
 with SessionLocal() as sess:
     l = sess.query(User).all()
@@ -103,9 +104,17 @@ def absent(voter_id: UUID):
     
 
 @app.post("/{voter_id}/present")
-def present(voter_id: UUID):
+def present(voter_id: str):
     with SessionLocal() as sess:
+        print(voter_id)
         user = sess.query(User).filter(User.id == voter_id).first()
+        all = sess.query(User).all()
+        for i in all:
+            s = "".join(voter_id.split("-"))
+            if s is voter_id:
+                print(f"Mam cię {i.first_name}, {i.id}")
+            print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
+        print(user)
         if user:
             user.meetings.append(M)
             return User
