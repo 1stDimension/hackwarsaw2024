@@ -73,25 +73,36 @@ BaseSQL.metadata.create_all(bind=engine)
 M = Meeting()
 print(M)
 
-with SessionLocal() as sess:
-    for i in range(10):
-        v = Voter(
-        first_name=F.name_female() if i % 2 == 0 else F.name_male(),
-        last_name=F.last_name_female() if i % 2 == 0 else F.last_name_female(),
-        local=F.building_number() 
-        )
-        u = User(first_name=v.first_name,last_name=v.last_name,local=v.local)
-        sess.add(u)
-        sess.commit()
-        vs.append(v)
+# with SessionLocal() as sess:
+    # for i in range(10):
+        # v = Voter(
+        # first_name=F.name_female() if i % 2 == 0 else F.name_male(),
+        # last_name=F.last_name_female() if i % 2 == 0 else F.last_name_female(),
+        # local=F.building_number() 
+        # )
+        # u = User(first_name=v.first_name,last_name=v.last_name,local=v.local)
+        # sess.add(u)
+        # sess.commit()
+        # vs.append(v)
 with SessionLocal() as sess:
     l = sess.query(User).all()
     print(l)
 
 @app.get("/")
 def read_main():
-    list_voters = Voters(voters=vs)
-    return list_voters
+    with SessionLocal() as sess:
+        l = sess.query(User).all()
+    s : list[Voter]= list()
+    for i in l:
+        s.append(
+            Voter(
+                first_name=i.first_name,
+                last_name=i.last_name,
+                local=i.local,
+                id=i.id
+            )
+        )
+    return s
 
 @app.post("/{voter_id}/absent")
 def absent(voter_id: UUID):
