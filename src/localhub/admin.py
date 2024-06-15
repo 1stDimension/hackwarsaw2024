@@ -5,4 +5,4 @@ app = FastAPI()
 
 @app.get("/app")
 def read_main():
-    return {"message": f"Hello World from {__module__} app"}
+    return {"message": f"Hello World from {__name__} app"}
