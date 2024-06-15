@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
 from faker import Faker
 from fastapi import FastAPI
+from localhub.models import Voter,Voters
 
 app = FastAPI()
 
@@ -20,16 +21,6 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 BaseSQL = declarative_base()
-
-class Voter(BaseModel):
-    first_name: str
-    last_name: str
-    local: str
-    id: str = Field(default_factory=lambda : uuid4().hex)
-
-class Voters(BaseModel):
-    voters: list[Voter]
-  
 
 from sqlalchemy import  Column, ForeignKey, Integer, String,Table
 from sqlalchemy.orm import relationship, Mapped
@@ -55,15 +46,7 @@ class User(BaseSQL):
     local = Column(String)
     meetings: Mapped[list[Meeting]] = relationship(secondary=association_table, back_populates="participants")
 
-# class Presence(BaseSQL):
-    # __tablename__ = "presences"
-    # id = Column(Integer, primary_key=True)
-    # meeting_id = Column(Integer,ForeignKey("transcript.id"))
-    # meetings = relationship("transcripts    ")
-    # voter_id = Column(Integer, ForeignKey("users.id"))
-    # voters = relationship("User",back_populates="meetings")
-
-
+# class Bill(BaseSQL)
 
 F = Faker()
 vs: list[Voter] = list()
@@ -72,6 +55,10 @@ BaseSQL.metadata.create_all(bind=engine)
 
 M = Meeting()
 print(M)
+
+
+def init_db()
+
 
 # with SessionLocal() as sess:
     # for i in range(10):
