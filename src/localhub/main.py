@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .admin import app as admin_mount
+from localhub.admin import app as admin_mount
 
 app = FastAPI()
 
