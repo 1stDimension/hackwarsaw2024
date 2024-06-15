@@ -20,7 +20,7 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+BaseSQL = declarative_base()
 
 
 class Voter(BaseModel):
@@ -31,6 +31,11 @@ class Voter(BaseModel):
 
 class Voters(BaseModel):
     voters: list[Voter]
+  
+class Presnet(BaseSQL):
+    __tablename__ = "presence"
+
+
 
 F = Faker()
 vs: list[Voter] = list()
@@ -46,6 +51,11 @@ for i in range(10):
 def read_main():
     list_voters = Voters(voters=vs)
     return list_voters
-@app.post("/{voter_id}")
+
+@app.post("/{voter_id}/absent")
+def absent(voter_id: UUID):
+    raise HTTPException(501)
+
+@app.post("/{voter_id}/present")
 def present(voter_id: UUID):
     raise HTTPException(501)

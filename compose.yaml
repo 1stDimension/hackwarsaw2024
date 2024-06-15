@@ -1,0 +1,36 @@
+services:
+  gateway:
+    image: nginx
+    ports:
+      - "8080:80"
+    environment:
+      - NGINX_PORT=80
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - keystore
+      - generate_key
+      - sign
+  generate_key:
+    build:
+      context: ./key_generator_service
+      tags:
+        - "hackyeah-key_generator:latest"
+    ports:
+      - 8001:80
+    environment:
+      - KEYSTORE_URL = "http://keystore:80/v1/keys"
+  sign:
+    build:
+      context: ./sign
+      tags:
+        - "hackyeah-sign:latest"
+    ports:
+      - 8000:80
+    environment:
+     - KEYSTORE_URL = "http://keystore"
+  #backend/asym-crypto:
+  #  build:
+  #    context: ./backend/asymm-crypto
+volumes:
+  hackyeah-keystore:
