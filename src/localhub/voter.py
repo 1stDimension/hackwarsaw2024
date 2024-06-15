@@ -25,7 +25,7 @@ class Voter(BaseModel):
     first_name: str
     last_name: str
     local: str
-    id: UUID = Field(default_factory=uuid4)
+    id: str = Field(default_factory=lambda : uuid4().hex)
 
 class Voters(BaseModel):
     voters: list[Voter]
@@ -118,17 +118,22 @@ def absent(voter_id: UUID):
 def present(voter_id: str):
     with SessionLocal() as sess:
         print(voter_id)
-        user = sess.query(User).filter(User.id == voter_id).first()
-        # all = sess.query(User).all()
-        # for i in all:
-            # s = "".join(voter_id.split("-"))
-            # if s is voter_id:
-                # print(f"Mam cię {i.first_name}, {i.id}")
-            # print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
-        # print(user)
-        if user:
-            print("Appended")
-            user.meetings.append(M)
-            return User
-        else:
-            raise HTTPException(404)
+        try:
+            user = sess.query(User).filter(User.id == voter_id).first()
+            # all = sess.query(User).all()
+            # for i in all:
+                # s = "".join(voter_id.split("-"))
+                # if s is voter_id:
+                    # print(f"Mam cię {i.first_name}, {i.id}")
+                # print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
+            # print(user)
+            print("Found")
+            if user:
+                print("Appended")
+                user.meetings.append(M)
+                print("User")
+                return user
+            else:
+                raise HTTPException(404)
+        except Exception as e:
+            print(type(e))
