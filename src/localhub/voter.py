@@ -132,8 +132,14 @@ def present(voter_id: str):
                 print("Appended")
                 user.meetings.append(M)
                 print("User")
-                return user
+                return Voter(
+                   first_name=user.first_name,
+                   last_name=user.last_name,
+                   local=user.local,
+                   id=user.id
+               )
+           )
             else:
                 raise HTTPException(404)
         except Exception as e:
-            print(type(e))
+            print(e)
