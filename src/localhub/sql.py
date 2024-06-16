@@ -46,11 +46,13 @@ class User(BaseSQL):
 
 BaseSQL.metadata.create_all(bind=engine)
 
+
 class Bill(BaseSQL):
     __tablename__ = "bills"
     id = Column(String, primary_key=True, default=lambda: uuid4().hex)
-    contents = Column(String,nullable=False)
+    contents = Column(String, nullable=False)
     creation_date = Column(String, default=lambda: datetime.now().timestamp)
+
 
 def init_db():
     F = Faker()

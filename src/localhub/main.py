@@ -5,7 +5,7 @@ from localhub.voter import app as voter_mount
 
 from localhub.sql import SessionLocal
 import localhub.sql
-from localhub.models import CreateBill,Bill
+from localhub.models import CreateBill, Bill
 import sqlalchemy
 
 app = FastAPI()
@@ -25,6 +25,7 @@ app.add_middleware(
 def read_main():
     return {"message": "Hello World from main app"}
 
+
 @app.post("/bill")
 def new_bill(bill: CreateBill):
     with SessionLocal() as s:
@@ -38,11 +39,12 @@ def new_bill(bill: CreateBill):
         )
         return b
 
+
 @app.get("/bill")
 def all_bills():
     with SessionLocal() as sess:
         all = sess.query(localhub.sql.Bill).all()
-    gather :list[Bill] = list
+    gather: list[Bill] = list
     for b in all:
         gather.append(
             Bill(
@@ -51,21 +53,21 @@ def all_bills():
             )
         )
     return gather
-            
-    
+
 
 @app.get("/bill/{bill_id}")
 def old_bill(bill_id: str):
     with SessionLocal() as sess:
         print(bill_id)
         try:
-            fetched_bill = sess.query(localhub.sql.Bill).filter(localhub.sql.Bill.id == bill_id).one_or_none()
+            fetched_bill = sess.query(localhub.sql.Bill).filter(
+                localhub.sql.Bill.id == bill_id).one_or_none()
             # all = sess.query(User).all()
             # for i in all:
-                # s = "".join(voter_id.split("-"))
-                # if s is voter_id:
-                    # print(f"Mam cię {i.first_name}, {i.id}")
-                # print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
+            # s = "".join(voter_id.split("-"))
+            # if s is voter_id:
+            # print(f"Mam cię {i.first_name}, {i.id}")
+            # print(f"{i.first_name}, {i.id}, comp {s}: {voter_id}")
             # print(user)
             if fetched_bill:
                 return Bill(
@@ -76,8 +78,6 @@ def old_bill(bill_id: str):
                 raise HTTPException(404)
         except sqlalchemy.exc.SQLAlchemyError as e:
             print(e)
-    
-
 
 
 app.mount("/admin", admin_mount)
