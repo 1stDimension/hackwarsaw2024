@@ -13,9 +13,9 @@ const routes = [
     component: () => import('../views/VotersView.vue')
   },
   {
-    path: '/resolution/add',
-    name: 'resolutionAdd',
-    component: () => import('../views/ResolutionAddView.vue')
+    path: '/bill/add',
+    name: 'billAdd',
+    component: () => import('../views/BillAddView.vue')
   }
 ]
 
