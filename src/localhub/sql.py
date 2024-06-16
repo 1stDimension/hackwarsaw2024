@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from faker import Faker
-from sqlalchemy import Column, ForeignKey, Integer, String, Table, create_engine
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, relationship, sessionmaker
 
@@ -44,14 +44,22 @@ class User(BaseSQL):
     )
 
 
-BaseSQL.metadata.create_all(bind=engine)
-
-
 class Bill(BaseSQL):
     __tablename__ = "bills"
     id = Column(String, primary_key=True, default=lambda: uuid4().hex)
     contents = Column(String, nullable=False)
     creation_date = Column(String, default=lambda: datetime.now().timestamp)
+
+
+class VoteBase(BaseSQL):
+    __tablename__ = "votes"
+    id = Column(String, primary_key=True, default=lambda: uuid4().hex)
+    choice = Column(String, nullable=False)
+    creation_date = Column(String, default=lambda: datetime.now().timestamp)
+    is_online = Column(Boolean, default=True, nullable=False)
+
+
+BaseSQL.metadata.create_all(bind=engine)
 
 
 def init_db():

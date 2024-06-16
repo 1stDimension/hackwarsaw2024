@@ -6,6 +6,11 @@ class User(BaseModel):
     id: str = Field(default_factory=lambda: uuid4().hex)
 
 
+class Vote(BaseModel):
+    choice: str
+    is_online: bool | None
+
+
 class Voter(BaseModel):
     first_name: str
     last_name: str

@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from fastapi import FastAPI
-from localhub.models import Login, Voter, Voters  # type: ignore
-from localhub.sql import Meeting, User, SessionLocal  # type: ignore
+from localhub.models import Login, Voter, Voters, Vote  # type: ignore
+from localhub.sql import Meeting, User, SessionLocal, VoteBase  # type: ignore
 
 app = FastAPI()
 
@@ -88,3 +88,13 @@ def present(voter_id: str):
                 raise HTTPException(404)
         except Exception as e:
             print(e)
+
+
+@app.post("/vote/")
+def voter_vote(vote: Vote):
+    with SessionLocal() as s:
+        vote_base = VoteBase(**vote.dict())
+        s.add(vote_base)
+        s.commit()
+        vote = s.refresh(vote_base)
+        return vote

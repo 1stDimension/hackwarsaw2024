@@ -3,7 +3,8 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/voters">Voters</router-link> |
     <router-link to="/bill/add">Add Bill</router-link> |
-    <router-link to="/voter/create">Create Voter</router-link>
+    <router-link to="/voter/create">Create Voter</router-link> |
+    <router-link to="/bills">Bills</router-link>
   </nav>
   <router-view/>
 </template>
