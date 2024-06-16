@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from localhub.admin import app as admin_mount
@@ -29,7 +31,10 @@ def read_main():
 @app.post("/bill")
 def new_bill(bill: CreateBill):
     with SessionLocal() as s:
-        new_bill = localhub.sql.Bill(contents=bill.contents, creation_date=1.0)
+        new_bill = localhub.sql.Bill(
+            contents=bill.contents,
+            creation_date=datetime.now().timestamp(),
+        )
         s.add(new_bill)
         s.commit()
         s.refresh(new_bill)

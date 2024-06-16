@@ -1,12 +1,35 @@
 from fastapi import HTTPException
 from fastapi import FastAPI
-from localhub.models import Voter, Voters  # type: ignore
+from localhub.models import Login, Voter, Voters  # type: ignore
 from localhub.sql import Meeting, User, SessionLocal  # type: ignore
 
 app = FastAPI()
 
 M = Meeting()
-print(M)
+
+
+@app.post("/")
+def new_voter(voter: Voter):
+    with SessionLocal() as s:
+        new_voter = User(
+            first_name=voter.first_name,
+            last_name=voter.last_name,
+            local=voter.local,
+        )
+        s.add(new_voter)
+        s.commit()
+        voter = s.refresh(new_voter)
+        return voter
+
+
+@app.post("/login")
+def login_user(user: Login):
+    with SessionLocal() as s:
+        user = s.query(User).filter(
+            User.username == user.username,
+            User.password == user.password
+        ).first()
+        return user
 
 
 @app.get("/")

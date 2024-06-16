@@ -17,6 +17,11 @@ class Voters(BaseModel):
     voters: list[Voter]
 
 
+class Login(BaseModel):
+    username: str
+    password: str
+
+
 class BillFull(BaseModel):
     pass
 
