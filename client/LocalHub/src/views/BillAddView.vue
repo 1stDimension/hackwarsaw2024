@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import getApiUrl from '@/composable/getPath.js'
 
 export default {
   name: 'billAdd',
@@ -29,7 +30,7 @@ export default {
       if (contents) {
         try {
           let response = await fetch(
-            `http://localhost:8000/bill`,
+            getApiUrl() + 'bill',
             {
               method: "POST",
               headers: {"Content-Type": "application/json"},

@@ -54,7 +54,7 @@ def read_main():
 def absent(voter_id: str):
     with SessionLocal() as sess:
         user = sess.query(User).filter(User.id == voter_id).first()
-        if user:
+        if user and M in user.meetings:
             user.meetings.remove(M)
         else:
             raise HTTPException(404)

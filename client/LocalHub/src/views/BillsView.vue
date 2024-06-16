@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import getApiUrl from '@/composable/getPath.js'
 import getBills from '@/composable/getBills'
 
 export default {
@@ -33,7 +34,7 @@ export default {
       console.log(voterId, state)
       try {
         let data = await fetch(
-          "http://localhost:8000/bills/",
+          getApiUrl() + "bills/",
           {
             method: "POST",
             redirect: "follow"

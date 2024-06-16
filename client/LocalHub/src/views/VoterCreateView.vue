@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import getApiUrl from '@/composable/getPath.js'
 
 export default {
   name: 'voterCreate',
@@ -33,7 +34,7 @@ export default {
       if (data.first_name && data.last_name && data.local) {
         try {
           let response = await fetch(
-            `http://localhost:8000/voter`,
+            getApiUrl() + 'voter',
             {
               method: "POST",
               headers: {"Content-Type": "application/json"},
