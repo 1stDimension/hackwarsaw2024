@@ -1,8 +1,7 @@
 from fastapi import HTTPException
-from uuid import UUID, uuid4
 from fastapi import FastAPI
-from localhub.models import Voter, Voters
-from localhub.sql import Meeting,User,SessionLocal
+from localhub.models import Voter, Voters # type: ignore
+from localhub.sql import Meeting,User,SessionLocal # type: ignore
 
 app = FastAPI()
 
@@ -27,7 +26,7 @@ def read_main():
     return s
 
 @app.post("/{voter_id}/absent")
-def absent(voter_id: UUID):
+def absent(voter_id: str):
     with SessionLocal() as sess:
         user = sess.query(User).filter(User.id == voter_id).first()
         if user:

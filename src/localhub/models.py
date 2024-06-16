@@ -17,5 +17,8 @@ class Voters(BaseModel):
 class BillFull(BaseModel):
     pass
 
-class Bill(BaseModel):
-    pass
+class CreateBill(BaseModel):
+    content: str
+
+class Bill(CreateBill):
+    id: str = Field(default_factory=lambda: uuid4().hex)
