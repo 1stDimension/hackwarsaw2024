@@ -27,13 +27,13 @@ class Login(BaseModel):
     password: str
 
 
-class BillFull(BaseModel):
-    pass
-
-
 class CreateBill(BaseModel):
     contents: str
 
 
 class Bill(CreateBill):
     id: str = Field(default_factory=lambda: uuid4().hex)
+
+
+class Bills(BaseModel):
+    bills: list[Bill]

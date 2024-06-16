@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from faker import Faker
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, create_engine
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, relationship, sessionmaker
 
@@ -44,7 +44,7 @@ class User(BaseSQL):
     )
 
 
-class Bill(BaseSQL):
+class BillBase(BaseSQL):
     __tablename__ = "bills"
     id = Column(String, primary_key=True, default=lambda: uuid4().hex)
     contents = Column(String, nullable=False)
@@ -55,7 +55,7 @@ class VoteBase(BaseSQL):
     __tablename__ = "votes"
     id = Column(String, primary_key=True, default=lambda: uuid4().hex)
     choice = Column(String, nullable=False)
-    creation_date = Column(String, default=lambda: datetime.now().timestamp)
+    creation_date = Column(DateTime, default=datetime.now())
     is_online = Column(Boolean, default=True, nullable=False)
 
 

@@ -31,7 +31,7 @@ def read_main():
 @app.post("/bill")
 def new_bill(bill: CreateBill):
     with SessionLocal() as s:
-        new_bill = localhub.sql.Bill(
+        new_bill = localhub.sql.BillBase(
             contents=bill.contents,
             creation_date=datetime.now().timestamp(),
         )
@@ -48,16 +48,8 @@ def new_bill(bill: CreateBill):
 @app.get("/bill")
 def all_bills():
     with SessionLocal() as sess:
-        all = sess.query(localhub.sql.Bill).all()
-    gather: list[Bill] = list
-    for b in all:
-        gather.append(
-            Bill(
-                id=b.id,
-                contents=b.contents
-            )
-        )
-    return gather
+        bills = sess.query(localhub.sql.BillBase).all()
+        return bills
 
 
 @app.get("/bill/{bill_id}")
@@ -65,8 +57,8 @@ def old_bill(bill_id: str):
     with SessionLocal() as sess:
         print(bill_id)
         try:
-            fetched_bill = sess.query(localhub.sql.Bill).filter(
-                localhub.sql.Bill.id == bill_id).one_or_none()
+            fetched_bill = sess.query(localhub.sql.BillBase).filter(
+                localhub.sql.BillBase.id == bill_id).one_or_none()
             # all = sess.query(User).all()
             # for i in all:
             # s = "".join(voter_id.split("-"))
