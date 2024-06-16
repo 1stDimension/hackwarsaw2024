@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from localhub.admin import app as admin_mount
 from localhub.voter import app as voter_mount
 
-from localhub.sql import SessionLocal,User
+from localhub.sql import SessionLocal
 import localhub.sql
 from localhub.models import CreateBill,Bill
 import sqlalchemy
