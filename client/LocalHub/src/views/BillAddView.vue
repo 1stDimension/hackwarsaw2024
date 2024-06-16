@@ -3,7 +3,7 @@
   <div class="about">
     <h1>Add bill</h1>
     <form @submit="saveBill">
-      <textarea name="context"></textarea>
+      <textarea name="contents"></textarea>
       <br>
       <input type="submit" value="Submit">
     </form>
@@ -23,19 +23,17 @@ export default {
   methods: {
     async saveBill(submitEvent) {
       submitEvent.preventDefault()
-      let context = submitEvent.target.context.value
+      let contents = submitEvent.target.contents.value
 
-      console.log(context)
-      if (context) {
+      console.log(contents)
+      if (contents) {
         try {
           let response = await fetch(
             `http://localhost:8000/bill`,
             {
               method: "POST",
               headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({
-                "context": context
-              })
+              body: JSON.stringify({contents})
             }
           )
         } catch (err) {

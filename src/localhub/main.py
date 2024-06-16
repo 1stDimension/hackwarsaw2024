@@ -28,13 +28,13 @@ def read_main():
 @app.post("/bill")
 def new_bill(bill: CreateBill):
     with SessionLocal() as s:
-        new_bill = localhub.sql.Bill(content=bill.content)
+        new_bill = localhub.sql.Bill(contents=bill.contents, creation_date=1.0)
         s.add(new_bill)
         s.commit()
         s.refresh(new_bill)
         b = Bill(
             id=new_bill.id,
-            content=new_bill.contents
+            contents=new_bill.contents
         )
         return b
 
@@ -47,7 +47,7 @@ def all_bills():
         gather.append(
             Bill(
                 id=b.id,
-                content=b.contents
+                contents=b.contents
             )
         )
     return gather

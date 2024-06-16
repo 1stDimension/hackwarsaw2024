@@ -18,7 +18,7 @@ class BillFull(BaseModel):
     pass
 
 class CreateBill(BaseModel):
-    content: str
+    contents: str
 
 class Bill(CreateBill):
     id: str = Field(default_factory=lambda: uuid4().hex)

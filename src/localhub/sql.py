@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from faker import Faker
-from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table, create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, relationship, sessionmaker
 
@@ -50,7 +50,7 @@ class Bill(BaseSQL):
     __tablename__ = "bills"
     id = Column(String, primary_key=True, default=lambda: uuid4().hex)
     contents = Column(String,nullable=False)
-    creation_date = Column(Float, default=lambda: datetime.now().timestamp)
+    creation_date = Column(String, default=lambda: datetime.now().timestamp)
 
 def init_db():
     F = Faker()
