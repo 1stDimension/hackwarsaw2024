@@ -14,5 +14,8 @@ class Voter(BaseModel):
 class Voters(BaseModel):
     voters: list[Voter]
 
+class BillFull(BaseModel):
+    pass
+
 class Bill(BaseModel):
-    
+    pass

@@ -1,78 +1,13 @@
 from fastapi import HTTPException
-from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
-from faker import Faker
 from fastapi import FastAPI
-from localhub.models import Voter,Voters
+from localhub.models import Voter, Voters
+from localhub.sql import Meeting,User,SessionLocal
 
 app = FastAPI()
 
-
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-BaseSQL = declarative_base()
-
-from sqlalchemy import  Column, ForeignKey, Integer, String,Table
-from sqlalchemy.orm import relationship, Mapped
-
-association_table = Table(
-    "association_table",
-    BaseSQL.metadata,
-    Column("voter_id", ForeignKey("users.id")), # type: ignore
-    Column("meeting_id", ForeignKey("transcripts.id")), # type: ignore
-)
-
-class Meeting(BaseSQL):
-    __tablename__ = "transcripts"
-    id = Column(Integer, primary_key=True)
-    transcript = Column(String,nullable=True)
-    participants : Mapped[list["User"]]= relationship(secondary=association_table, back_populates="meetings")
-
-class User(BaseSQL):
-    __tablename__ = "users"
-    id = Column(String, primary_key=True, default=lambda : uuid4().hex)
-    first_name = Column(String)
-    last_name = Column(String)
-    local = Column(String)
-    meetings: Mapped[list[Meeting]] = relationship(secondary=association_table, back_populates="participants")
-
-# class Bill(BaseSQL)
-
-F = Faker()
-vs: list[Voter] = list()
-
-BaseSQL.metadata.create_all(bind=engine)
-
 M = Meeting()
 print(M)
-
-
-def init_db()
-
-
-# with SessionLocal() as sess:
-    # for i in range(10):
-        # v = Voter(
-        # first_name=F.name_female() if i % 2 == 0 else F.name_male(),
-        # last_name=F.last_name_female() if i % 2 == 0 else F.last_name_female(),
-        # local=F.building_number() 
-        # )
-        # u = User(first_name=v.first_name,last_name=v.last_name,local=v.local)
-        # sess.add(u)
-        # sess.commit()
-        # vs.append(v)
-with SessionLocal() as sess:
-    print(sess.query(User).all())
 
 @app.get("/")
 def read_main():
@@ -83,10 +18,10 @@ def read_main():
         for i in l:
            s.append(
                Voter(
-                   first_name=i.first_name,
-                   last_name=i.last_name,
-                   local=i.local,
-                   id=i.id
+                   first_name=i.first_name, # type: ignore
+                   last_name=i.last_name, # type: ignore
+                   local=i.local, # type: ignore
+                   id=i.id # type: ignore
                )
            )
     return s
@@ -120,10 +55,10 @@ def present(voter_id: str):
                 user.meetings.append(M)
                 print("User")
                 return Voter(
-                   first_name=user.first_name,
-                   last_name=user.last_name,
-                   local=user.local,
-                   id=user.id
+                   first_name=user.first_name, # type: ignore
+                   last_name=user.last_name, # type: ignore
+                   local=user.local, # type: ignore
+                   id=user.id # type: ignore
                )
             else:
                 raise HTTPException(404)
