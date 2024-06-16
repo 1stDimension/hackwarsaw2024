@@ -1,7 +1,11 @@
 from datetime import datetime
+from logging import debug, info
+import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from localhub.admin import app as admin_mount
 from localhub.voter import app as voter_mount
 
@@ -79,3 +83,19 @@ def old_bill(bill_id: str):
 
 app.mount("/admin", admin_mount)
 app.mount("/voter", voter_mount)
+
+@app.get("/{f_path:path}")
+def send_files(f_path: str):
+    current = os.getcwd()
+    print(f"{current}")
+    static_dir = os.path.join(current,"client/LocalHub/dist/")
+    try_path = os.path.join(static_dir, f_path)
+    if os.path.isdir(try_path):
+        try_path = os.path.join(try_path,"index.html")
+    if os.path.exists(try_path):
+        return FileResponse(try_path)
+    else:
+        return HTTPException(404)
+
+# @app.get("/")
+# def send_files
